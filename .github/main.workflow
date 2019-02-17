@@ -1,15 +1,23 @@
 workflow "Basic Pipeline" {
-  resolves = ["GitHub Action for npm", "Filters for GitHub Actions"]
+  resolves = ["GitHub Action for npm"]
   on = "push"
 }
 
-action "Filters for GitHub Actions" {
-  uses = "actions/bin/filter@master"
-  args = "branch master"
+workflow "Push Pipeline" {
+  resolves = ["GitHub Action for Debug"]
+  on = "push"
+}
+
+workflow "PR Pipeline" {
+  resolves = ["GitHub Action for Debug"]
+  on = "pull_request"
 }
 
 action "GitHub Action for npm" {
   uses = "actions/npm@master"
-  needs = ["Filters for GitHub Actions"]
   args = "test"
+}
+
+action "GitHub Action for Debug" {
+  uses = "actions/bin/debug@master"
 }
